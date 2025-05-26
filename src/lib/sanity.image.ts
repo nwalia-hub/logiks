@@ -1,17 +1,18 @@
 // lib/sanity.image.ts
-import { createClient } from '@sanity/client';
+
 import imageUrlBuilder from '@sanity/image-url';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 import { client } from './client';
 
-// Create image URL builder
+// Shared builder instance
 const builder = imageUrlBuilder(client);
 
-// Image URL generator function
-export const urlForImage = (source: any) => {
+/** Build a URL for any Sanity image source */
+export function urlForImage(source: SanityImageSource) {
   return builder.image(source);
-};
+}
 
-// Optional helper with default settings
-export function imageUrlFor(source: any) {
+/** Build a high-res URL with sensible defaults */
+export function imageUrlFor(source: SanityImageSource) {
   return urlForImage(source).width(1920).quality(80).auto('format').fit('max');
 }

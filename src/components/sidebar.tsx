@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Flame } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import Link from 'next/link';

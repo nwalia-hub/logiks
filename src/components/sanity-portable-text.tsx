@@ -1,4 +1,3 @@
-// components/sanity-portable-text.tsx
 'use client';
 
 import Image from 'next/image';
@@ -6,9 +5,49 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import type { PortableTextBlock } from '@portabletext/types';
 import { useNextSanityImage } from 'next-sanity-image';
 import { client } from '@/lib/client';
-import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
+/* ---------- Image block renderer ---------- */
+type ImageBlockProps = {
+  value: SanityImageSource & {
+    alt?: string;
+    caption?: string;
+    asset?: { metadata?: { lqip?: string } };
+  };
+};
+
+function PortableImage({ value }: ImageBlockProps) {
+  const imageProps = useNextSanityImage(client, value);
+  if (!imageProps) return null;
+
+  return (
+    <figure className="my-6">
+      <Image
+        {...imageProps}
+        alt={value.alt || ''}
+        placeholder={value.asset?.metadata?.lqip ? 'blur' : 'empty'}
+        blurDataURL={value.asset?.metadata?.lqip}
+        className="rounded-lg"
+      />
+      {value.caption && (
+        <figcaption className="mt-2 text-sm text-gray-500">
+          {value.caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/* ---------- Portable-Text component map ---------- */
 const components: PortableTextComponents = {
+  types: {
+    image: PortableImage, // 👈 now the linter is happy
+    code: ({ value }) => (
+      <pre className="my-6 overflow-x-auto rounded-lg bg-gray-800 p-4">
+        <code className="text-gray-100">{value?.code}</code>
+      </pre>
+    ),
+  },
   block: {
     normal: ({ children }) => (
       <p className="mb-4 leading-relaxed">{children}</p>
@@ -25,7 +64,6 @@ const components: PortableTextComponents = {
       </blockquote>
     ),
   },
-
   marks: {
     strong: ({ children }) => (
       <strong className="font-semibold">{children}</strong>
@@ -42,38 +80,6 @@ const components: PortableTextComponents = {
       </a>
     ),
   },
-
-  types: {
-    image: ({ value }) => {
-      const imageProps = useNextSanityImage(client, value as SanityImageSource);
-
-      if (!imageProps) return null;
-
-      return (
-        <figure className="my-6">
-          <Image
-            {...imageProps}
-            alt={value.alt || ''}
-            placeholder={value.asset?.metadata?.lqip ? 'blur' : 'empty'}
-            blurDataURL={value.asset?.metadata?.lqip}
-            className="rounded-lg"
-          />
-          {value.caption && (
-            <figcaption className="mt-2 text-sm text-gray-500">
-              {value.caption}
-            </figcaption>
-          )}
-        </figure>
-      );
-    },
-
-    code: ({ value }) => (
-      <pre className="my-6 overflow-x-auto rounded-lg bg-gray-800 p-4">
-        <code className="text-gray-100">{value?.code}</code>
-      </pre>
-    ),
-  },
-
   list: {
     bullet: ({ children }) => (
       <ul className="mb-4 list-disc pl-6">{children}</ul>
@@ -84,9 +90,8 @@ const components: PortableTextComponents = {
   },
 };
 
-type Props = {
-  content: PortableTextBlock[];
-};
+/* ---------- Wrapper component ---------- */
+type Props = { content: PortableTextBlock[] };
 
 export default function SanityPortableText({ content }: Props) {
   return <PortableText value={content} components={components} />;
