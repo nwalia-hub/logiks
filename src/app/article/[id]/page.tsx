@@ -1,22 +1,22 @@
+// app/article/[id]/page.tsx
 import { client } from '@/lib/client';
 import ArticleContent from '@/components/article-content';
 import { RelatedNews } from '@/components/related-news';
-import type { SanityDocument } from 'next-sanity';
+import { SanityDocument } from 'next-sanity';
 
-// 1️⃣  Define the real shape—no Promise
-interface ArticlePageProps {
-  params: { id: string };
-  searchParams?: Record<string, string | string[]>;
-}
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
 
-// 2️⃣  Async component is fine; just use params directly
-export default async function ArticlePage({ params }: ArticlePageProps) {
   const post = await client.fetch<SanityDocument>(
     `*[_type=="post" && _id==$id][0]{
       _id,title,description,publishedAt,
       "imageUrl":coalesce(image.asset->url,image._upload.previewImage)
     }`,
-    { id: params.id },
+    { id },
     { next: { revalidate: 30 } }
   );
 
