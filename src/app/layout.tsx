@@ -6,6 +6,7 @@ import { Navigation } from '@/components/navigation';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 import { Sidebar } from '@/components/sidebar';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -56,6 +57,7 @@ export default function RootLayout({
               </aside>
 
               {children}
+              <Analytics />
             </div>
           </div>
         </ThemeProvider>
