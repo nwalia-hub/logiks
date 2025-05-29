@@ -27,7 +27,7 @@ function PostCard({ post, first }: { post: SanityDocument; first?: boolean }) {
       </div>
 
       {/* BODY */}
-      <div className={`flex-1 px-4 ${big ? 'py-6 text-white' : 'py-4'}`}>
+      <div className={`flex-1 px-4 ${big ? 'py-6' : 'py-4'}`}>
         <h2
           className={`font-semibold leading-snug ${
             big ? 'text-xl lg:text-2xl' : 'text-base'
