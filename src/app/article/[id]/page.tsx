@@ -4,10 +4,11 @@ import ArticleContent from '@/components/article-content';
 import { RelatedNews } from '@/components/related-news';
 import { SanityDocument } from 'next-sanity';
 
-export default async function Page(
-  /** The inferred type is fine; add your own only if you really need it */
-  { params }: { params: Promise<{ id: string }> }
-) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 
   const post = await client.fetch<SanityDocument>(
