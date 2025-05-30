@@ -7,7 +7,7 @@ export function Navigation() {
   return (
     <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
       <Link href="/" className="text-lg font-bold sm:text-xl">
-        EzExplains
+        Logiks
       </Link>
       <NavLink href="/" icon={<Newspaper className="h-4 w-4" />} label="Home" />
       <NavLink

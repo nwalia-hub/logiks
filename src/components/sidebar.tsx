@@ -28,7 +28,7 @@ export function Sidebar() {
         {/* Replace with <Avatar> if you have user pics */}
         <Flame className="h-8 w-8 text-primary" />
         <div>
-          <p className="font-semibold leading-none">EzExplains</p>
+          <p className="font-semibold leading-none">Logiks</p>
           <p className="text-xs text-muted-foreground">Neeraj Walia</p>
         </div>
       </div>
